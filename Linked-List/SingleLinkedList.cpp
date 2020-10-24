@@ -13,19 +13,22 @@ struct node{
 
 struct node * CreateList(struct node * start);
 void Display(struct node * start);
-// void Count(struct node * start);
+void Count(struct node * start);
+void Search(struct node * start, int data);
+
 
 int main()
 {
 	struct node * start = NULL;
-	int choice;
+	int choice, data;
 	
 	while(1)
 	{
 		cout<<"1. Create Linked List\n";
 		cout<<"2. Display List\n";
-		// cout<<"3. Count nodes of List\n";
-		cout<<"4. Quit\n";
+	    cout<<"3. Count nodes of List\n";
+		cout<<"4. Search\n";
+		cout<<"5. Quit\n";
 		
 		cout<<"Enter your choice : ";
 		cin>>choice;
@@ -38,10 +41,15 @@ int main()
 		case 2:
 			Display(start);
 			break;
-		// case 3:
-		//	Count(start);
-		//	break;
+	    case 3:
+			Count(start);
+			break;
 		case 4:
+			cout<<"Enter the element to be searched : ";
+			cin>>data;
+			Search(start, data);
+			break;
+		case 5:
 			exit(1);
 		default :
 			cout<<"Wrong choice\n";
@@ -98,6 +106,44 @@ void Display(struct node * start)
 		cout<<"\n\n";
 		
 }
+
+void Count(struct node * start)
+{
+	struct node * temp = start;
+	int counter = 0;
+	
+	while(temp != NULL)
+	{
+		temp = temp->link;
+		counter++;
+	}
+	cout<<"Number of Nodes in Linked List : "<<counter<<endl;
+	
+}
+
+void Search(struct node * start, int data)
+{
+	struct node * temp = start;
+	bool found = false;
+	while(temp != NULL)
+	{
+		if(temp->data == data)
+		{
+			found = true;
+			break;
+		}
+		temp = temp->link;
+	}
+	
+	if(found == true)
+	cout<<"Node with info : "<<data<<" exists\n";
+	else
+	cout<<"Node with info : "<<data<<" does not exists\n";
+	
+	
+}
+
+
 
 
 
