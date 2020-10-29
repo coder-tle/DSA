@@ -21,12 +21,13 @@ void Search(struct node * start, int data);
 struct node * AddAtBeg(struct node *start, int data);
 struct node * AddAtEnd(struct node *start, int data);
 struct node * AddAfter(struct node *start, int data, int item);
-// struct node * AddBefore(struct node * start, int data);
+struct node * AddBefore(struct node * start, int data, int item);
+struct node * AddAtPos(struct node * start, int data, int pos);
 
 int main()
 {
 	struct node * start = NULL;
-	int choice, data, item;
+	int choice, data, item, pos;
 	
 	while(1)
 	{
@@ -80,11 +81,19 @@ int main()
 		case 8 :
 			cout<<"Enter the element to be inserted : ";
 			cin>>data;
-			//start = AddBefore(start, data);
+			cout<<"Enter the element before which to insert : ";
+			cin>>item;
+			start = AddBefore(start, data, item);
 			break;
 			
-			
 		case 9:
+			cout<<"Enter the element to be inserted : ";
+			cin>>data;
+			cout<<"Enter the position at which to insert : ";
+			cin>>pos;
+			start = AddAtPos(start, data, pos);
+			break;
+		case 10:
 			exit(1);
 		default :
 			cout<<"Wrong choice\n";
@@ -262,3 +271,73 @@ struct node * AddAfter(struct node * start, int data, int item)
 	cout<<item<<" is not present in the list\n";
 	return start;
 }
+struct node * AddBefore(struct node * start, int data, int item)
+{
+	struct node * temp, * p;
+	temp = p = start;
+	
+	if(start == NULL)
+	{
+		cout<<"List is empty\n";
+		return start;
+	}
+	else if(start->data == item)
+	{
+		temp = new node;
+		temp->data = data;
+		temp->link = start;
+		start = temp;
+		return start;
+	}
+	else{
+		// doubt on why p->link is used 
+		while(p->link != NULL)// p!= NULL is not used because we are checking for one node ahead
+		{
+			if(p->link->data == item)
+			{
+				temp = new node;
+				temp->data = data;
+				temp->link = p->link;
+				p->link = temp;
+				return start;
+			}
+			p = p->link; 
+		}
+	}
+	cout<<item<<" is not present in the list\n";
+	return start;
+}
+
+
+struct node * AddAtPos(struct node * start, int data, int pos)
+{
+	if(start == NULL)
+	{
+		cout<<"List is empty\n";
+		return start;
+	}
+	
+	struct node * temp, *p;
+	
+	p = start;
+	
+	for(int i = 1; i<=pos-1 && p!= NULL; i++)
+	{
+		p = p->link;
+	}
+	
+	if(p != NULL)
+	{
+		temp = new node;
+		temp->data = data;
+		temp->link = p->link;
+		p->link = temp;
+	}
+	else
+	{
+		cout<<"There are less than "<<pos<<" elements\n";
+	}
+	return start;
+}
+
+
