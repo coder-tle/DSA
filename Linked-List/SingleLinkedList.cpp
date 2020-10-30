@@ -24,6 +24,11 @@ struct node * AddAfter(struct node *start, int data, int item);
 struct node * AddBefore(struct node * start, int data, int item);
 struct node * AddAtPos(struct node * start, int data, int pos);
 
+struct node * DeleteNode(struct node * start, int data);
+struct node * ReverseList(struct node * start);
+
+
+
 int main()
 {
 	struct node * start = NULL;
@@ -39,8 +44,10 @@ int main()
 		cout<<"6. Add at end\n";
 		cout<<"7. Add after node\n";
 		cout<<"8. Add before node\n";
-		
-		cout<<"9. Quit\n";
+		cout<<"9. Add at pos\n";
+		cout<<"10. Delete\n";
+		cout<<"11. Reverse\n";
+		cout<<"12. Quit\n\n";
 		
 		cout<<"Enter your choice : ";
 		cin>>choice;
@@ -93,7 +100,16 @@ int main()
 			cin>>pos;
 			start = AddAtPos(start, data, pos);
 			break;
-		case 10:
+		case 10: 
+			cout<<"Enter the element to be deleted : ";
+			cin>>data;
+			start = DeleteNode(start, data);
+			break;
+		
+		case 11:
+			start = ReverseList(start);
+			break;
+		case 12:
 			exit(1);
 		default :
 			cout<<"Wrong choice\n";
@@ -341,3 +357,58 @@ struct node * AddAtPos(struct node * start, int data, int pos)
 }
 
 
+struct node * DeleteNode(struct node * start, int data)
+{
+	if(start == NULL)
+	{
+		cout<<"List is empty\n";
+		return start;
+	}
+	struct node * temp, * p;
+	
+	// Deletion in beginning of list
+	if(start->data == data)
+	{
+			temp = start;
+			start = start->link;
+			// free(temp); // it gave error 
+			delete temp;
+			return start;
+	}
+	
+	p = start;
+	
+	while(p->link != NULL)
+	{
+		if(p->link->data == data)
+		{
+			temp = p->link;
+			p->link = temp->link;
+			delete temp;
+			return start;
+		}
+		p = p->link;
+	}
+	
+	cout<<"Element not found in the list\n";
+	return start;
+}
+
+struct node * ReverseList(struct node * start)
+{
+	struct node * prev, * curr, * next;
+	prev = NULL;
+	curr = start;
+	
+	while(curr != NULL)
+	{
+		next = curr->link;
+		curr->link = prev;
+		prev = curr;
+		curr = next;
+	}
+	start = prev;
+	
+	return start;
+	
+}
