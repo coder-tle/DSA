@@ -22,6 +22,9 @@ struct node * AddToEmptyList(struct node * start, int data);
 struct node * AddAtBeginning(struct node * start, int data);
 struct node * AddAtEnd(struct node * start, int data);
 
+// Delete function
+struct node * DeleteNode(struct node * start, int data);
+
 
 int main()
 {
@@ -36,6 +39,7 @@ int main()
 		cout<<"4. Add at beginning\n";
 		cout<<"5. Add at end\n";
 		
+		cout<<"8. Delete\n";
 		cout<<"10. Quit\n";
 		
 		cout<<"Enter your choice : ";
@@ -68,6 +72,11 @@ int main()
 			start = AddAtEnd(start, data);
 			break;
 			
+		case 8:
+			cout<<"Enter the element to be deleted : ";
+			cin>>data;
+			start = DeleteNode(start, data);
+			break;
 		case 10:
 		exit(1);//Whit
 		
@@ -170,4 +179,59 @@ struct node * CreateList(struct node * start)
 }
 
 
+struct node * DeleteNode(struct node * start, int data)
+{
+	struct node * temp, * p ;
+	p = temp = start;
+	
+	if(start == NULL)
+	{
+		cout<<"List is empty\n";
+		return start;
+	}
+	
+	// One node
+	if(start->next == NULL)
+	{
+		temp = start;
+		start = start->next;
+		delete temp;
+		return start;
+	}
+	
+	// delte first node
+	if(start->info == data)
+	{
+		temp = start;
+		start = start->next;
+		start->prev = NULL;
+		return start;
+	}
+	
+	// delete  in-between
+	
+	while( temp != NULL)
+	{
+		if( temp->info == data )
+		{
+			// not end of list
+			if(temp->next != NULL)
+			{
+				temp->prev->next = temp->next;
+				temp->next->prev = temp->prev;
+			}
+			// node at end of the list
+			else if(temp->next == NULL)
+			{
+				temp->prev->next = NULL;
+			}
+			return start;
+		}
+		temp = temp->next;
+		
+	}
+	cout<<"Node with value "<<data<<" does not exist in the list\n";
+	return start;
+	
+}
 
