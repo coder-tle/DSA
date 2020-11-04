@@ -21,9 +21,16 @@ void Display(struct node * start);
 struct node * AddToEmptyList(struct node * start, int data);
 struct node * AddAtBeginning(struct node * start, int data);
 struct node * AddAtEnd(struct node * start, int data);
+struct node * AddAfter(struct node * start, int data, int item);
+struct node * AddBefore(struct node * start, int data, int item);
+
+
 
 // Delete function
 struct node * DeleteNode(struct node * start, int data);
+
+// Reverse function
+struct node * ReverseList(struct node* start);
 
 
 int main()
@@ -38,8 +45,10 @@ int main()
 		cout<<"3. Add to empty list\n";
 		cout<<"4. Add at beginning\n";
 		cout<<"5. Add at end\n";
-		
+		cout<<"6. Add after\n";
+		cout<<"7. Add before\n";
 		cout<<"8. Delete\n";
+		cout<<"9. Reverse\n";
 		cout<<"10. Quit\n";
 		
 		cout<<"Enter your choice : ";
@@ -71,12 +80,33 @@ int main()
 			cin>>data;
 			start = AddAtEnd(start, data);
 			break;
+		
+		case 6:
+			cout<<"Enter the element to be inserted : ";
+			cin>>data;
+			cout<<"Enter the element after which to insert : ";
+			cin>>item;
+			start = AddAfter(start,data, item);
+			break;
+			
+		case 7:
+			cout<<"Enter the element to be inserted : ";
+			cin>>data;
+			cout<<"Enter the element before which to insert : ";
+			cin>>item;
+			start = AddBefore(start, data, item);
+			break;
 			
 		case 8:
 			cout<<"Enter the element to be deleted : ";
 			cin>>data;
 			start = DeleteNode(start, data);
 			break;
+		
+		case 9: 
+			start = ReverseList(start);
+			break;
+			
 		case 10:
 		exit(1);//Whit
 		
@@ -235,3 +265,103 @@ struct node * DeleteNode(struct node * start, int data)
 	
 }
 
+struct node * ReverseList(struct node* start)
+{
+	if(start == NULL)
+	return start;
+	
+	struct node * curr , * nextNode;
+	curr = start;
+	nextNode = curr->next;
+	
+	// condition needs to be checked
+	while(nextNode->next != NULL)
+	{
+		nextNode = curr->next;
+		curr->next = curr->prev;
+		curr->prev = nextNode;
+		curr = nextNode; 
+	}
+	
+	curr->next = curr->prev;
+	curr->prev = NULL;
+	start = curr;
+	
+	return start;
+	
+	
+}
+
+struct node * AddAfter(struct node * start, int data, int item)
+{
+	struct node * p = start, *temp;
+	
+	while(p != NULL)
+	{
+		if(p->info == item)
+		{
+			temp = new node;
+			temp->info = data;
+			temp->prev = p;
+			temp->next = p->next;
+			if(p->next != NULL)
+				p->next->prev = temp;
+			p->next = temp;
+			return start;
+		}
+		p = p->next;
+		
+	}
+	
+	cout<<item<<" is not present in the list\n";
+	return start;
+	
+}
+
+struct node * AddBefore(struct node * start, int data, int item)
+{
+	struct node * q = start, * temp;
+	
+	
+	// Remember to consider base condition of empty list
+	// and insertion before first node
+	
+	if(start == NULL)
+	{
+		cout<<"List is empty\n";
+		return start;
+	}
+	
+	if(start->info == item)
+	{
+		temp = new node;
+		temp->info = data;
+		
+		temp->next = start;
+		temp->prev = NULL;
+		start->prev = temp;
+		start = temp;
+		return start;
+	}
+	
+	while(q != NULL)
+	{
+		if(q->info == item)
+		{
+			temp = new node;
+			temp->info = data;
+			
+			temp->prev = q->prev;
+			temp->next = q;
+			q->prev->next = temp;
+			q->prev = temp;
+			return start;
+		}
+		q = q->next;
+	}
+	
+	cout<<item<<" is not present in the list\n";
+	return start;
+	
+	
+}
