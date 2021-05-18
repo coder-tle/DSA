@@ -58,7 +58,7 @@ using namespace std;
         return res;
     }
     
-    int reverse(int x) {
+    int reverseWithOveflow(int x) {
         bool negative = false;
         if(x<0){
             negative = true;
@@ -68,9 +68,11 @@ using namespace std;
         int maxNumber = 0x7FFFFFFF;
         string maxNumberString = numberToString(maxNumber);
         string inputString = numberToString(x);
+     
         cout<<inputString<<endl;
         string reverseOfInput = reverseString(inputString);
         cout<<reverseOfInput<<endl;
+        
         if(isGreater(reverseOfInput,maxNumberString)){ 
             // reverse of input is greater than maxNumber string
             // return 0;
@@ -78,8 +80,8 @@ using namespace std;
             
         }
         int result = stringToNumber(reverseOfInput);
-        cout<<reverseOfInput<<endl;
-        cout<<result<<endl;
+       // cout<<reverseOfInput<<endl;
+        //cout<<result<<endl;
         if(negative)
         return (    (-1)*result );
         return result;
@@ -98,11 +100,60 @@ using namespace std;
         }
         return res;
     }*/
+int reverse1(int x){
+	int temp, rev= 0;
+	
+	
+	int pop;
+	//cout<<"Before while loop\n";
+	while(x!=0){ // this was only for positive 
+		
+		pop = x%10;
+		x = x/10;
+		//cout<<"Value of rev: "<<rev<<endl;
+		
+		if(	(rev > INT_MAX/10) || ((rev==INT_MAX/10) && (pop > 7))	){
+			//cout<<"Rev: "<<rev<<endl;
+		return 0;
+		}
+		if(	(rev < INT_MIN/10) ||( (rev==INT_MIN/10) && (pop < -8)	)){
+			//cout<<"Rev: "<<rev<<endl;
+		return 0;
+		}
+		temp = rev*10 + pop;// this might create overflow
+		
+		rev = temp;
+	}
+	//cout<<"Out of while loop\nValue is being returned\n";
+	return rev;
+}
+int reverse(int x) {
+        int rev = 0;
+        while (x != 0) {
+            int pop = x % 10;
+            x /= 10;
+            if (rev > INT_MAX/10 || (rev == INT_MAX / 10 && pop > 7)) return 0;
+            if (rev < INT_MIN/10 || (rev == INT_MIN / 10 && pop < -8)) return 0;
+            rev = rev * 10 + pop;
+        }
+        return rev;
+    }
 int main(){
 	
 	
-	cout<<reverse(-2147483412
-);
+	//cout<<reverseWithOveflow(-2147483412);
+	int _;
+	cin>>_;
+	int t;
+	while(_--){
+		cin>>t;
+		cout<<reverse1(t)<<endl;
+	}
+	//int a = -2147483412;
+	//cout<<"Before operation : "<<a<<endl;
+	//a = a * (-1);
+	//cout<<"After operation : "<<a<<endl;
+	
 /*	cout<<0x7FFFFFFF;
 	
 	int a = 0x7FFFFFFF;
